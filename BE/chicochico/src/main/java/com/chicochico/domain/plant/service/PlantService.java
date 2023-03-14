@@ -3,12 +3,13 @@ package com.chicochico.domain.plant.service;
 
 import com.chicochico.domain.plant.entity.PlantEntity;
 import com.chicochico.domain.plant.repository.PlantRepository;
+import com.chicochico.exception.CustomException;
+import com.chicochico.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -17,7 +18,7 @@ import java.util.List;
 public class PlantService {
 
 	private final PlantRepository plantRepository;
-
+	
 
 	/**
 	 * 홈화면에서 식물이름을 검색합니다.
@@ -27,7 +28,8 @@ public class PlantService {
 	 * @return 식물 조회 페이지
 	 */
 	public Page<PlantEntity> getPlantWithImageList(String search, Pageable pageable) {
-		return Page.empty();
+		Page<PlantEntity> plantEntityPage = plantRepository.findAllByNameContaining(search, pageable);
+		return plantEntityPage;
 	}
 
 
@@ -39,7 +41,8 @@ public class PlantService {
 	 * @return 식물 조회 페이지
 	 */
 	public Page<PlantEntity> getPlantList(String search, Pageable pageable) {
-		return Page.empty();
+		Page<PlantEntity> plantEntityPage = plantRepository.findAllByNameContaining(search, pageable);
+		return plantEntityPage;
 	}
 
 
@@ -51,7 +54,8 @@ public class PlantService {
 	 * @return 식물 조회 페이지
 	 */
 	public Page<PlantEntity> getPlantListByIndex(String index, Pageable pageable) {
-		return Page.empty();
+		Page<PlantEntity> plantEntityPage = plantRepository.findAllByNameContaining(index, pageable);
+		return plantEntityPage;
 	}
 
 
@@ -61,8 +65,9 @@ public class PlantService {
 	 * @param plantId 상세조회할 식물 id
 	 * @return 조회된 식물 정보
 	 */
-	public PlantEntity getPlant(String plantId) {
-		return new PlantEntity();
+	public PlantEntity getPlant(Long plantId) {
+		PlantEntity plant = plantRepository.findById(plantId).orElseThrow(() -> new CustomException(ErrorCode.ENTITY_NOT_FOUND));
+		return plant;
 	}
 
 
@@ -72,7 +77,8 @@ public class PlantService {
 	 * @return 인기 식물 리스트
 	 */
 	public List<PlantEntity> getPopularPlantList() {
-		return new ArrayList<>();
+		List<PlantEntity> plantList = plantRepository.findTop5ByOrderByUserCountDesc();
+		return plantList;
 	}
 
 }
