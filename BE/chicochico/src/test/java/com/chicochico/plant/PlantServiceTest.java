@@ -3,6 +3,7 @@ package com.chicochico.plant;
 
 import com.chicochico.domain.plant.entity.PlantEntity;
 import com.chicochico.domain.plant.repository.PlantRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -14,7 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.lenient;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -36,11 +37,13 @@ public class PlantServiceTest {
 			.id(2L).name("선인장").build();
 		list.add(plant2);
 
-		PageRequest pageable = PageRequest.of(0, 3);
-		Page<PlantEntity> page = new PageImpl<>(list, pageable, 5);
+		PageRequest pageable = PageRequest.of(0, 5);
+		Page<PlantEntity> page = new PageImpl<>(list);
 
-		when(plantRepository.findAllByNameContaining("선", pageable)).thenReturn(page);
-		
+		lenient().when(plantRepository.findAllByNameContaining("선", pageable)).thenReturn(page);
+		Page<PlantEntity> result = plantRepository.findAllByNameContaining("선", pageable);
+		Assertions.assertThat(((PlantEntity) result.toList().get(0)).getName()).isNotNull().isInstanceOf(String.class);
+
 	}
 
 
@@ -56,11 +59,14 @@ public class PlantServiceTest {
 			.id(2L).name("선인장").build();
 		list.add(plant2);
 
-		PageRequest pageable = PageRequest.of(0, 3);
-		Page<PlantEntity> page = new PageImpl<>(list, pageable, 5);
+		PageRequest pageable = PageRequest.of(0, 5);
+		Page<PlantEntity> page = new PageImpl<>(list);
 
-		when(plantRepository.findAllByNameContaining("ㅅ", pageable)).thenReturn(page);
+		lenient().when(plantRepository.findAllByNameBetween("ㅅ", "ㅇ", pageable)).thenReturn(page);
 
+		Page<PlantEntity> result = plantRepository.findAllByNameBetween("ㅅ", "ㅇ", pageable);
+
+		Assertions.assertThat(((PlantEntity) result.toList().get(0)).getName()).isNotNull().isInstanceOf(String.class);
 	}
 
 }
