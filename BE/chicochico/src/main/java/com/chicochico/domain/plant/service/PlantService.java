@@ -18,7 +18,7 @@ import java.util.List;
 public class PlantService {
 
 	private final PlantRepository plantRepository;
-	
+
 
 	/**
 	 * 홈화면에서 식물이름을 검색합니다.
@@ -54,7 +54,10 @@ public class PlantService {
 	 * @return 식물 조회 페이지
 	 */
 	public Page<PlantEntity> getPlantListByIndex(String index, Pageable pageable) {
-		Page<PlantEntity> plantEntityPage = plantRepository.findAllByNameContaining(index, pageable);
+		String idxlist = "ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎ휗";
+		int idx = idxlist.indexOf(index);
+
+		Page<PlantEntity> plantEntityPage = plantRepository.findAllByNameBetween(index, String.valueOf(idxlist.charAt(idx + 1)), pageable);
 		return plantEntityPage;
 	}
 

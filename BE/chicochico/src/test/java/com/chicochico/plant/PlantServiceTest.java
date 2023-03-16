@@ -40,6 +40,7 @@ public class PlantServiceTest {
 		Page<PlantEntity> page = new PageImpl<>(list, pageable, 5);
 
 		when(plantRepository.findAllByNameContaining("선", pageable)).thenReturn(page);
+		
 	}
 
 

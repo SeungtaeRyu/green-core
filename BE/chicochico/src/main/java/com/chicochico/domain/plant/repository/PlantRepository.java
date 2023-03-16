@@ -13,6 +13,7 @@ import java.util.Optional;
 public interface PlantRepository extends JpaRepository<PlantEntity, Long> {
 
 	Page<PlantEntity> findAllByNameContaining(String search, Pageable pageable);
+	Page<PlantEntity> findAllByNameBetween(String str1, String str2, Pageable pageable);
 	Optional<PlantEntity> findById(Long plantId);
 	List<PlantEntity> findTop5ByOrderByUserCountDesc();
 
