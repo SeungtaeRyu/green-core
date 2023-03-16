@@ -6,5 +6,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 
 public interface UserPlantRepository extends JpaRepository<UserPlantEntity, Long> {
-	
 }

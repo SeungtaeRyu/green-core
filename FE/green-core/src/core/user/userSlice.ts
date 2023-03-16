@@ -1,8 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import * as userAPI from './userAPI';
 
-export const TOKEN_TIME_OUT = 600 * 1000;
-
 interface UserState {
   isAuthenticated: boolean;
   isOAuth: boolean;
@@ -59,6 +57,10 @@ const userSlice = createSlice({
           state.isAuthenticated = true;
           state.accessToken = action.payload?.accessToken;
         }
+      })
+      .addCase(userAPI.deleteUser.fulfilled, (state) => {
+        state.isAuthenticated = false;
+        state.accessToken = null;
       });
   },
 });
