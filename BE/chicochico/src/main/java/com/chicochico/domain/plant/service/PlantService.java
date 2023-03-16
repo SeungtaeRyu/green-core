@@ -34,6 +34,19 @@ public class PlantService {
 
 
 	/**
+	 * 내가 키우는 식물에서 식물 검색을 합니다.
+	 *
+	 * @param search   검색할 식물 이름
+	 * @param pageable 페이지네이션
+	 * @return 식물 조회 페이지
+	 */
+	public Page<PlantEntity> getPlantListAtMyPage(String search, Pageable pageable) {
+		Page<PlantEntity> plantEntityPage = plantRepository.findAllByNameContaining(search, pageable);
+		return plantEntityPage;
+	}
+
+
+	/**
 	 * 도감페이지에서 식물이름을 검색합니다.
 	 *
 	 * @param search   검색할 식물 이름
