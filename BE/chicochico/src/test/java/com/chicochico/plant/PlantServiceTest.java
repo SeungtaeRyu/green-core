@@ -3,9 +3,11 @@ package com.chicochico.plant;
 
 import com.chicochico.domain.plant.entity.PlantEntity;
 import com.chicochico.domain.plant.repository.PlantRepository;
+import com.chicochico.domain.plant.service.PlantService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
@@ -16,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -23,7 +26,9 @@ public class PlantServiceTest {
 
 	@Mock
 	private PlantRepository plantRepository;
-
+	@InjectMocks
+	private PlantService plantService;
+	
 
 	@Test
 	public void 식물이름검색() {
@@ -40,9 +45,9 @@ public class PlantServiceTest {
 		PageRequest pageable = PageRequest.of(0, 5);
 		Page<PlantEntity> page = new PageImpl<>(list);
 
-		lenient().when(plantRepository.findAllByNameContaining("선", pageable)).thenReturn(page);
-		Page<PlantEntity> result = plantRepository.findAllByNameContaining("선", pageable);
-		Assertions.assertThat(((PlantEntity) result.toList().get(0)).getName()).isNotNull().isInstanceOf(String.class);
+		when(plantRepository.findAllByNameContaining("선", pageable)).thenReturn(page);
+		Page<PlantEntity> result = plantService.getPlantList("선", pageable);
+		Assertions.assertThat((result.toList().get(0)).getName()).isNotNull().isInstanceOf(String.class);
 
 	}
 
@@ -64,9 +69,9 @@ public class PlantServiceTest {
 
 		lenient().when(plantRepository.findAllByNameBetween("ㅅ", "ㅇ", pageable)).thenReturn(page);
 
-		Page<PlantEntity> result = plantRepository.findAllByNameBetween("ㅅ", "ㅇ", pageable);
+		Page<PlantEntity> result = plantService.getPlantListByIndex("ㅅ", pageable);
 
-		Assertions.assertThat(((PlantEntity) result.toList().get(0)).getName()).isNotNull().isInstanceOf(String.class);
+		Assertions.assertThat((result.toList().get(0)).getName()).isNotNull().isInstanceOf(String.class);
 	}
 
 }
