@@ -40,6 +40,17 @@ public class PlantController {
 	}
 
 
+	@GetMapping("/user")
+	@ApiOperation(value = "내가 키우는 식물 추가를 위해 식물이름을 검색합니다.", notes = "")
+	public ResponseEntity<ResultDto<Page<PlantResponseDto>>> getPlantListAtMyPage(@RequestParam("search") String search,
+		@PageableDefault(size = 12, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+		Page<PlantEntity> plantList = plantService.getPlantListAtMyPage(search, pageable);
+		Page<PlantResponseDto> plantResponseDtoPage = PlantResponseDto.fromEnityPage(plantList);
+
+		return ResponseEntity.ok().body(ResultDto.of(plantResponseDtoPage));
+	}
+
+
 	@GetMapping(value = "/docs", params = { "search" })
 	@ApiOperation(value = "도감페이지에서 식물이름을 검색합니다.", notes = "")
 	public ResponseEntity<ResultDto<Page<PlantResponseDto>>> getPlantList(@RequestParam("search") String search,
