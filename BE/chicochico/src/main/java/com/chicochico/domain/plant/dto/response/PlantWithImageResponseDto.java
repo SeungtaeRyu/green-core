@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,13 +45,13 @@ public class PlantWithImageResponseDto {
 	}
 
 
-	public static Page<PlantWithImageResponseDto> fromEnityPage(Page<PlantEntity> xxList) {
+	public static Page<PlantWithImageResponseDto> fromEnityPage(Page<PlantEntity> xxList, Pageable pageable) {
 		List<PlantWithImageResponseDto> result = new ArrayList<>();
 		for (PlantEntity xx : xxList) {
 			PlantWithImageResponseDto xxResponseDto = PlantWithImageResponseDto.fromEntity(xx);
 			result.add(xxResponseDto);
 		}
-		Page<PlantWithImageResponseDto> resultPage = new PageImpl<>(result);
+		Page<PlantWithImageResponseDto> resultPage = new PageImpl<>(result, pageable, result.size());
 
 		return resultPage;
 	}

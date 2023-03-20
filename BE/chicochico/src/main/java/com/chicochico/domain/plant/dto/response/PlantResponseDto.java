@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,9 +55,10 @@ public class PlantResponseDto {
 	//	}
 
 
-	public static Page<PlantResponseDto> fromEnityPage(Page<PlantEntity> xxList) {
+	public static Page<PlantResponseDto> fromEnityPage(Page<PlantEntity> xxList, Pageable pageable) {
 		List<PlantResponseDto> result = xxList.stream().map(PlantResponseDto::fromEntity).collect(Collectors.toList());
-		Page<PlantResponseDto> resultPage = new PageImpl<>(result);
+
+		Page<PlantResponseDto> resultPage = new PageImpl<>(result, pageable, result.size());
 		return resultPage;
 	}
 
