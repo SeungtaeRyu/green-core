@@ -8,7 +8,6 @@ import com.chicochico.domain.user.service.EmailService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
-@Log4j2
 @RestController
 @RequestMapping("/mail")
 @RequiredArgsConstructor
@@ -26,7 +24,7 @@ public class EmailController {
 	private final EmailService emailService;
 
 
-	@PostMapping
+	@PostMapping("/")
 	@ApiOperation(value = "인증 이메일을 발송합니다.", notes = "")
 	public ResponseEntity<ResultDto<Boolean>> sendVerificationEmail(@RequestBody EmailRequestDto emailRequestDto) {
 		emailService.sendVerificationEmail(emailRequestDto);
@@ -38,9 +36,9 @@ public class EmailController {
 	@PostMapping("/confirm")
 	@ApiOperation(value = "이메일 인증을 확인합니다.", notes = "")
 	public ResponseEntity<ResultDto<Boolean>> confirmEmail(@RequestBody AuthCodeRequestDto authCodeRequestDto) {
-		Boolean confirmEmail = emailService.confirmEmail(authCodeRequestDto);
+		emailService.confirmEmail(authCodeRequestDto);
 
-		return ResponseEntity.ok().body(ResultDto.of(confirmEmail));
+		return ResponseEntity.ok().body(ResultDto.ofSuccess());
 	}
 
 

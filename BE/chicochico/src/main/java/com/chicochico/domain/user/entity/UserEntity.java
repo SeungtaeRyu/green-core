@@ -69,33 +69,13 @@ public class UserEntity extends CommonEntity implements UserDetails {
 	private List<FollowEntity> followingList = new ArrayList<>();
 
 
-	public void setPassword(String password) {
+	public void updatePassword(String password) {
 		this.password = password;
 	}
 
 
-	public void setIsDeleted(IsDeletedType isDeleted) {
+	public void updateIsDeletedType(IsDeletedType isDeleted) {
 		this.isDeleted = isDeleted;
-	}
-
-
-	public void increaseFollowingCount() {
-		this.followingCount++;
-	}
-
-
-	public void decreaseFollowingCount() {
-		this.followingCount--;
-	}
-
-
-	public void increaseFollowerCount() {
-		this.followerCount++;
-	}
-
-
-	public void decreaseFollowerCount() {
-		this.followerCount--;
 	}
 
 
