@@ -100,6 +100,7 @@ public class PostService {
 			.content(postRequestDto.getContent())
 			.imagePath(savedPath)
 			.likeCount(0)
+			.commentCount(0)
 			.isDeleted(IsDeletedType.N)
 			.build();
 		post = postRepository.save(post);
@@ -146,6 +147,7 @@ public class PostService {
 			.content(postRequestDto.getContent())
 			.imagePath(savedPath)
 			.likeCount(originPost.getLikeCount())
+			.commentCount(originPost.getCommentCount())
 			.isDeleted(IsDeletedType.N)
 			.build();
 		newPost = postRepository.save(newPost);
