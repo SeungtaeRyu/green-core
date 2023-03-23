@@ -24,6 +24,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -33,6 +34,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DiarySetService {
 
+	private static final String IMAGE_FILE_SUB_DIR = "diaryset";
+	private static final String DEFAULT_IMAGE_FILE = IMAGE_FILE_SUB_DIR + File.separator + "default.jpg";
 	private final DiarySetRepository diarySetRepository;
 	private final DiaryRepository diaryRepository;
 	private final BookmarkRepository bookmarkRepository;
@@ -74,7 +77,9 @@ public class DiarySetService {
 
 		// 이미지 저장
 		MultipartFile image = diarySetRequestDto.getImage();
-		String savedPath = fileService.storeImageFile(image, FeedService.IMAGE_FILE_SUB_DIR);
+		String savedPath = this.DEFAULT_IMAGE_FILE;
+		if (image != null && !image.isEmpty())
+			savedPath = fileService.storeImageFile(image, this.IMAGE_FILE_SUB_DIR);
 
 		// DiarySetEntity 저장
 		DiarySetEntity diarySet = DiarySetEntity.builder()
@@ -109,8 +114,10 @@ public class DiarySetService {
 		fileService.deleteImageFile(originImagePath);
 
 		// 새로운 이미지 저장
-		MultipartFile multipartFile = diarySetRequestDto.getImage();
-		String newImagePath = fileService.storeImageFile(multipartFile, FeedService.IMAGE_FILE_SUB_DIR);
+		MultipartFile image = diarySetRequestDto.getImage();
+		String savedPath = this.DEFAULT_IMAGE_FILE;
+		if (image != null && !image.isEmpty())
+			savedPath = fileService.storeImageFile(image, this.IMAGE_FILE_SUB_DIR);
 
 		// (내키식은 수정할 수 없다)
 
@@ -119,7 +126,7 @@ public class DiarySetService {
 			.id(originDiarySet.getId())
 			.user(originDiarySet.getUser())
 			.userPlant(originDiarySet.getUserPlant())
-			.imagePath(newImagePath)
+			.imagePath(savedPath)
 			.diaryCount(originDiarySet.getDiaryCount())
 			.title(diarySetRequestDto.getTitle())
 			.isDeleted(originDiarySet.getIsDeleted())

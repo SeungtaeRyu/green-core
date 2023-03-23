@@ -52,7 +52,9 @@ public class DiaryService {
 		UserEntity user = userRepository.findByIdAndIsDeleted(userId, IsDeletedType.N).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 		// 이미지 저장
 		MultipartFile image = diaryRequestDto.getImage();
-		String savedPath = fileService.storeImageFile(image, FeedService.IMAGE_FILE_SUB_DIR);
+		String savedPath = FeedService.DEFAULT_IMAGE_FILE;
+		if (image != null && !image.isEmpty())
+			savedPath = fileService.storeImageFile(image, FeedService.IMAGE_FILE_SUB_DIR);
 
 		// DiaryEntity 저장
 		DiaryEntity diary = DiaryEntity.builder()
@@ -130,15 +132,17 @@ public class DiaryService {
 		feedService.deleteConnectedTags(originDiary);
 
 		// 새 이미지 저장
-		MultipartFile multipartFile = diaryRequestDto.getImage();
-		String newImagePath = fileService.storeImageFile(multipartFile, FeedService.IMAGE_FILE_SUB_DIR);
+		MultipartFile image = diaryRequestDto.getImage();
+		String savedPath = FeedService.DEFAULT_IMAGE_FILE;
+		if (image != null && !image.isEmpty())
+			savedPath = fileService.storeImageFile(image, FeedService.IMAGE_FILE_SUB_DIR);
 
 		// DiaryEntity 수정
 		DiaryEntity newDiary = DiaryEntity.builder()
 			.id(originDiary.getId())
 			.user(originDiary.getUser())
 			.content(diaryRequestDto.getContent())
-			.imagePath(newImagePath)
+			.imagePath(savedPath)
 			.likeCount(originDiary.getLikeCount())
 			.isDeleted(originDiary.getIsDeleted())
 			.diarySet(originDiary.getDiarySet())
