@@ -16,6 +16,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -27,7 +28,7 @@ import java.util.stream.Collectors;
 public class FeedService {
 
 	static public final String IMAGE_FILE_SUB_DIR = "feed";
-
+	public static final String DEFAULT_IMAGE_FILE = IMAGE_FILE_SUB_DIR + File.separator + "default.jpg"; // TODO : 기본 이미지 지정하기
 	private final FeedRepository feedRepository;
 	private final FeedTagRepository feedTagRepository;
 	private final TagRepository tagRepository;

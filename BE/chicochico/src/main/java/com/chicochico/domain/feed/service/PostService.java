@@ -90,7 +90,9 @@ public class PostService {
 
 		// 이미지 저장
 		MultipartFile image = postRequestDto.getImage();
-		String savedPath = fileService.storeImageFile(image, FeedService.IMAGE_FILE_SUB_DIR);
+		String savedPath = FeedService.DEFAULT_IMAGE_FILE;
+		if (image != null && !image.isEmpty())
+			savedPath = fileService.storeImageFile(image, FeedService.IMAGE_FILE_SUB_DIR);
 
 		// PostEntity 저장
 		PostEntity post = PostEntity.builder()
@@ -133,15 +135,17 @@ public class PostService {
 		feedService.deleteConnectedTags(originPost);
 
 		// 새로운 이미지 저장
-		MultipartFile multipartFile = postRequestDto.getImage();
-		String newImagePath = fileService.storeImageFile(multipartFile, FeedService.IMAGE_FILE_SUB_DIR);
+		MultipartFile image = postRequestDto.getImage();
+		String savedPath = FeedService.DEFAULT_IMAGE_FILE;
+		if (image != null && !image.isEmpty())
+			savedPath = fileService.storeImageFile(image, FeedService.IMAGE_FILE_SUB_DIR);
 
 		// PostEntity 수정한 내용 저장
 		PostEntity newPost = PostEntity.builder()
 			.id(originPost.getId())
 			.user(writer)
 			.content(postRequestDto.getContent())
-			.imagePath(newImagePath)
+			.imagePath(savedPath)
 			.likeCount(originPost.getLikeCount())
 			.commentCount(originPost.getCommentCount())
 			.isDeleted(IsDeletedType.N)
