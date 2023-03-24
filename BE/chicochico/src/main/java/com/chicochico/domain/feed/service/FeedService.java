@@ -16,6 +16,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -116,7 +117,7 @@ public class FeedService {
 	 */
 	public List<TagEntity> getTagList(Long feedId) {
 		FeedEntity feed = feedRepository.findById(feedId).orElseThrow(() -> new CustomException(ErrorCode.FEED_NOT_FOUND));
-		List<FeedTagEntity> feedTagList = feedTagRepository.findByFeed(feed);
+		List<FeedTagEntity> feedTagList = feed.getFeedTagList();
 		List<TagEntity> tagList = feedTagList.stream().map(FeedTagEntity::getTag).collect(Collectors.toList());
 		return tagList;
 	}
@@ -320,6 +321,12 @@ public class FeedService {
 
 		// 연결된 좋아요 삭제 --> 영구 삭제
 		deleteConnectedLike(feed);
+	}
+
+
+	@Transactional
+	public void deleteAllLikesByUserId(Long userId) {
+		likeRepository.deleteByUserId(userId);
 	}
 
 }
